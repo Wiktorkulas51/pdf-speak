@@ -1,6 +1,5 @@
 .canvas_conteiner {
     width: 100%;
-    height: 100vh;
     overflow: auto;
     background: #333;
     text-align: center;

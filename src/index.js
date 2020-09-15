@@ -20,7 +20,6 @@ const myState = {
 };
 
 //render pdf from inpute
-///something to add
 
 const pdfJsLib = pdfjsLib.getDocument("example2.pdf");
 pdfJsLib.promise.then((pdf) => {
@@ -33,7 +32,12 @@ pdfJsLib.promise.then((pdf) => {
     viewer.appendChild(canvas);
     for (let page = 1; page <= myState.fullPages; page++) {
       const wrapper = document.createElement("div");
+      wrapper.className = "wrapper";
       const createdCanvas = document.createElement("canvas");
+      createdCanvas.className = "pdf_renderer";
+      wrapper.style.width = "1019px";
+      wrapper.style.height = "1319px";
+      wrapper.style.background = "blue";
       wrapper.appendChild(createdCanvas);
 
       render(page, canvas);
@@ -47,37 +51,53 @@ function render(pageNumber, canvas, scale = 1.2) {
   const PRINT_UNITS = 100 / 72;
   const ctx = canvas.getContext("2d");
 
-  myState.pdf.getPage(pageNumber).then((page) => {
-    const viewport = page.getViewport({ scale: scale });
+  const renderTask = null;
 
-    canvas.width = 1019;
-    canvas.height = 1319;
-    //after pdf pops up on the screen make everything form the top invisibility for now i suggest only when scroll up then shows input and upload button
+  if (renderTask !== null) {
+    console.log("es");
+    renderTask.cancel();
+    return;
+  }
 
-    if (page) {
-      window.addEventListener("scroll", () => {
-        // const scrollable =
-        //   document.documentElement.scrollHeight - window.innerHeight;
-        const scrolled = window.scrollY;
+  myState.pdf
+    .getPage(pageNumber)
+    .then((page) => {
+      const viewport = page.getViewport({ scale: scale });
 
-        console.log(Math.ceil(scrolled), "math");
-        if (Math.ceil(scrolled) >= window.scrollY) {
-          myForm.style.position = "sticky";
-        }
-        //there is problem with overwriting current value
-        if ((myForm.classList.value = "myForm")) {
-          myForm.classList.add("scrollDown");
-          myForm.style.position = "static";
-        }
-      });
-    }
+      canvas.width = 1019;
+      canvas.height = 1319;
+      //after pdf pops up on the screen make everything form the top invisibility for now i suggest only when scroll up then shows input and upload button
 
-    return page.render({
-      canvasContext: ctx,
-      transform: [PRINT_UNITS, 0, 0, PRINT_UNITS, 0, 0],
-      viewport: viewport,
-    }).promise;
-  });
+      if (page) {
+        window.addEventListener("scroll", () => {
+          // const scrollable =
+          //   document.documentElement.scrollHeight - window.innerHeight;
+          const scrolled = window.scrollY;
+
+          console.log(Math.ceil(scrolled), "math");
+          if (Math.ceil(scrolled) >= window.scrollY) {
+            myForm.style.position = "sticky";
+          }
+          //there is problem with overwriting current value
+          if ((myForm.classList.value = "myForm")) {
+            myForm.classList.add("scrollDown");
+            myForm.style.position = "static";
+          }
+        });
+      }
+
+      renderTask = page.render({
+        canvasContext: ctx,
+        transform: [PRINT_UNITS, 0, 0, PRINT_UNITS, 0, 0],
+        viewport: viewport,
+      }).promise;
+    })
+    .catch((err) => {
+      if (err.name === "RenderingCancelledException") {
+        render(myState.currentPage, canvas);
+      }
+    });
+  //only for now
 }
 
 btnNext.addEventListener("click", () => {
@@ -111,6 +131,13 @@ zoomOut.addEventListener("click", () => {
   }
   render(myState.currentPage, canvas, myState.zoom);
 });
+
+//onchange or onclick change page based of the inpute value
+// inputeCrruentPage.addEventListener("change", (e) => {
+//   myState.currentPage = inputeCrruentPage.value;
+//   console.log(myState.currentPage);
+//   render(myState.currentPage, canvas);
+// });
 
 //implement this text to voice caller
 async function getPdfText() {
