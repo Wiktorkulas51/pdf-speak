@@ -14,21 +14,28 @@
     <textarea name="text" id="txt" cols="30" rows="10"></textarea>
     <!-- <button class="btn">play</button> -->
 
-    <form method="POST" action="/" enctype="multipart/form-data" class="myForm">
-        <input type="file" class="real-file" name="inpFile" multiple />
-        <button>upload file</button>
-    </form>
-    <div>
+    <nav class="nav">
+        <form method="POST" action="/" enctype="multipart/form-data" class="myForm">
+            <div class="div__file-inpute">
+
+                <input type="file" class="real-file" name="inpFile" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" />
+
+                <button id="inputGroupFileAddon04" class="btn btn-secondary">upload file</button>
+            </div>
+        </form>
+        <button class="speak btn btn-secondary">Speak</button>
+        <button class="stop btn btn-secondary">stop</button>
         <div class="navigation">
-            <button class="previous">previous</button>
-            <button class="next">next</button>
+            <button class="previous btn btn-secondary">previous</button>
+            <button class="next btn btn-secondary">next</button>
             <input type="number" value="1" class="current_page" />
+            <div class="zomm_control">
+                <button class="zoom_in btn btn-secondary">+</button>
+                <button class="zoom_out btn btn-secondary">-</button>
+            </div>
         </div>
-        <div class="zomm_control">
-            <button class="zoom_in">+</button>
-            <button class="zoom_out">-</button>
         </div>
-    </div>
+    </nav>
 
     <div class="canvas_conteiner">
         <!-- <canvas class="pdf_renderer"></canvas> -->

@@ -1,13 +1,12 @@
 .canvas_conteiner {
     width: 100%;
     overflow: auto;
-    background: #333;
+    background: rgb(95, 93, 93);
     text-align: center;
     border: 3px solid;
 }
 
 .pdf_renderer {
-    display: block;
     width: 60%;
     height: 1000px;
 }
@@ -22,4 +21,44 @@
     justify-content: center;
     top: 0;
     /* position: ; */
+}
+
+.nav {
+    background: linear-gradient(45deg, #302f2e, #5f5e5e);
+    display: flex;
+    text-align: center;
+    justify-content: space-between;
+    min-height: 10vh;
+    -webkit-box-shadow: 2px 23px 5px -3px rgba(0, 0, 0, 0.63);
+    -moz-box-shadow: 2px 23px 5px -3px rgba(0, 0, 0, 0.63);
+    box-shadow: 2px 23px 5px -3px rgba(0, 0, 0, 0.63) !important;
+}
+
+.navigation {
+    display: flex;
+    text-align: center;
+    justify-content: space-around;
+}
+
+.real-file {
+    margin-top: 10px;
+    margin-left: 5px;
+    color: white;
+}
+
+.btn {
+    margin: 5px;
+}
+
+.current_page {
+    height: 4vh;
+    margin-top: 6px;
+}
+
+.btn {
+    max-height: 6vh;
+}
+
+.div__file-inpute {
+    margin: 5px;
 }

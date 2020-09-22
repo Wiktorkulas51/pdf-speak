@@ -30,18 +30,7 @@ pdfJsLib.promise.then((pdf) => {
     canvas = document.createElement("canvas");
     canvas.className = "pdf_renderer";
     viewer.appendChild(canvas);
-    for (let page = 1; page <= myState.fullPages; page++) {
-      const wrapper = document.createElement("div");
-      wrapper.className = "wrapper";
-      const createdCanvas = document.createElement("canvas");
-      createdCanvas.className = "pdf_renderer";
-      wrapper.style.width = "1019px";
-      wrapper.style.height = "1319px";
-      wrapper.style.background = "blue";
-      wrapper.appendChild(createdCanvas);
-
-      render(page, canvas);
-    }
+    render(myState.currentPage, canvas);
   }
 });
 
@@ -141,6 +130,7 @@ zoomOut.addEventListener("click", () => {
 
 //implement this text to voice caller
 async function getPdfText() {
+  const simleArray = [];
   let doc = await pdfjsLib.getDocument("example2.pdf").promise;
   let pageTexts = Array.from({ length: doc.numPages }, async (v, i) => {
     return (await (await doc.getPage(i + 1)).getTextContent()).items.map(
@@ -148,7 +138,18 @@ async function getPdfText() {
     );
   });
   // return it as an array
-  return (await Promise.all(pageTexts)).join("");
+  const text = (await Promise.all(pageTexts)).join("");
+  simleArray.push(text);
+
+  const speakButton = document.querySelector(".speak");
+  speakButton.addEventListener("click", () => {
+    simleArray.forEach((element) => responsiveVoice.speak(element));
+  });
+
+  const stopButton = document.querySelector(".stop");
+  stopButton.addEventListener("click", () => {
+    responsiveVoice.cancel();
+  });
 }
 
 getPdfText();

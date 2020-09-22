@@ -10,7 +10,7 @@ app.use(upload());
 app.post("/", (req, res) => {
   const file = req.files.inpFile;
   const fileName = file.name;
-
+  module.exports.file = fileName;
   file.mv(`./src/uploads/${fileName}`, (err) => {
     if (err) {
       res.status(404).send(err);
