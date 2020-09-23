@@ -28,7 +28,7 @@
     display: flex;
     text-align: center;
     justify-content: space-between;
-    min-height: 10vh;
+    min-height: 7vh;
     -webkit-box-shadow: 2px 23px 5px -3px rgba(0, 0, 0, 0.63);
     -moz-box-shadow: 2px 23px 5px -3px rgba(0, 0, 0, 0.63);
     box-shadow: 2px 23px 5px -3px rgba(0, 0, 0, 0.63) !important;
@@ -41,6 +41,7 @@
 }
 
 .real-file {
+    width: 100px;
     margin-top: 10px;
     margin-left: 5px;
     color: white;
@@ -61,4 +62,32 @@
 
 .div__file-inpute {
     margin: 5px;
+}
+
+.guide {
+    position: fixed;
+    height: 50px;
+    width: 50px;
+    left: 1800px;
+    bottom: 100px;
+    background-color: #6c757d;
+    color: white;
+    font-size: 13px;
+}
+
+.loadingparagraf {
+    position: fixed;
+    left: 1600px;
+    top: 200px;
+    color: white;
+}
+
+.smoothe {
+    position: fixed;
+    color: #302f2e;
+    left: 1600px;
+    bottom: 100px;
+    background-color: whitesmoke;
+    width: 260px;
+    height: 130px;
 }

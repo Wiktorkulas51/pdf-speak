@@ -20,14 +20,19 @@
 
                 <input type="file" class="real-file" name="inpFile" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" />
 
+
                 <button id="inputGroupFileAddon04" class="btn btn-secondary">upload file</button>
             </div>
         </form>
-        <button class="speak btn btn-secondary">Speak</button>
-        <button class="stop btn btn-secondary">stop</button>
+        <div>
+            <button class="speak btn btn-secondary">Speak</button>
+            <button class="stop btn btn-secondary">stop</button>
+        </div>
         <div class="navigation">
-            <button class="previous btn btn-secondary">previous</button>
-            <button class="next btn btn-secondary">next</button>
+            <div>
+                <button class="previous btn btn-secondary">previous</button>
+                <button class="next btn btn-secondary">next</button>
+            </div>
             <input type="number" value="1" class="current_page" />
             <div class="zomm_control">
                 <button class="zoom_in btn btn-secondary">+</button>
@@ -39,6 +44,7 @@
 
     <div class="canvas_conteiner">
         <!-- <canvas class="pdf_renderer"></canvas> -->
+        <button class="guide btn btn-secondary">Guid</button>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@2.4.456/build/pdf.min.js"></script>

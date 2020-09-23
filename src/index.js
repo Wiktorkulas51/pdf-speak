@@ -6,6 +6,7 @@ const btnNext = document.querySelector(".next");
 const inputeCrruentPage = document.querySelector(".current_page");
 const zoomIn = document.querySelector(".zoom_in");
 const zoomOut = document.querySelector(".zoom_out");
+const guide = document.querySelector(".guide");
 
 // btn.addEventListener("click", () => {
 //   const text = document.querySelector("#txt").value;
@@ -56,24 +57,6 @@ function render(pageNumber, canvas, scale = 1.2) {
       canvas.width = 1019;
       canvas.height = 1319;
       //after pdf pops up on the screen make everything form the top invisibility for now i suggest only when scroll up then shows input and upload button
-
-      if (page) {
-        window.addEventListener("scroll", () => {
-          // const scrollable =
-          //   document.documentElement.scrollHeight - window.innerHeight;
-          const scrolled = window.scrollY;
-
-          console.log(Math.ceil(scrolled), "math");
-          if (Math.ceil(scrolled) >= window.scrollY) {
-            myForm.style.position = "sticky";
-          }
-          //there is problem with overwriting current value
-          if ((myForm.classList.value = "myForm")) {
-            myForm.classList.add("scrollDown");
-            myForm.style.position = "static";
-          }
-        });
-      }
 
       renderTask = page.render({
         canvasContext: ctx,
@@ -128,8 +111,17 @@ zoomOut.addEventListener("click", () => {
 //   render(myState.currentPage, canvas);
 // });
 
+// async function createParagraf() {
+//   const loadingParagraf = document.createElement("p");
+//   loadingParagraf.innerHTML = "Hello, wait a bit, the text is loading :)";
+//   loadingParagraf.classList = "loadingparagraf";
+//   const wrap = document.querySelector(".canvas_conteiner");
+//   await wrap.appendChild(loadingParagraf);
+// }
+
 //implement this text to voice caller
 async function getPdfText() {
+  let check = false;
   const simleArray = [];
   let doc = await pdfjsLib.getDocument("example2.pdf").promise;
   let pageTexts = Array.from({ length: doc.numPages }, async (v, i) => {
@@ -141,15 +133,40 @@ async function getPdfText() {
   const text = (await Promise.all(pageTexts)).join("");
   simleArray.push(text);
 
-  const speakButton = document.querySelector(".speak");
-  speakButton.addEventListener("click", () => {
-    simleArray.forEach((element) => responsiveVoice.speak(element));
+  const stopButton = document.querySelector(".stop");
+
+  stopButton.addEventListener("click", () => {
+    check = true;
+    responsiveVoice.pause();
   });
 
-  const stopButton = document.querySelector(".stop");
-  stopButton.addEventListener("click", () => {
-    responsiveVoice.cancel();
+  const speakButton = document.querySelector(".speak");
+  speakButton.addEventListener("click", () => {
+    simleArray.forEach(async (element) => {
+      if (check) {
+        responsiveVoice.resume();
+      } else {
+        responsiveVoice.speak(element);
+      }
+
+      // console.log("responsiveVoice", responsiveVoice.getWords());
+    });
   });
+
+  //search
+  console.log("responsiveVoice", responsiveVoice);
 }
 
 getPdfText();
+
+// quick guide
+
+guide.addEventListener("click", () => {
+  guide.classList = "guide smoothe";
+  guide.innerHTML =
+    "Hello thats quick guid, first choose File(only pdf) or use defult one, speak - use text speaker, stop - stop text speaker, next - next page, previous - previous page, + - zoom in, - - zoom out ";
+  setTimeout(() => {
+    guide.classList = "guide btn btn-secondary";
+    guide.innerHTML = "Guide";
+  }, 15000);
+});
