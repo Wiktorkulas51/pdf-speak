@@ -18,13 +18,14 @@
         <form method="POST" action="/" enctype="multipart/form-data" class="myForm">
             <div class="div__file-inpute">
 
-                <input type="file" class="real-file" name="inpFile" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" />
+                <input type="file" class="real-file" name="inpFile" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" hidden />
+                <label for="file" class="inpute-label">Choose file</label>
 
 
-                <button id="inputGroupFileAddon04" class="btn btn-secondary">upload file</button>
+                <button id="inputGroupFileAddon04" class="btn btn-secondary">Upload file</button>
             </div>
         </form>
-        <div>
+        <div class="speak-stop">
             <button class="speak btn btn-secondary">Speak</button>
             <button class="stop btn btn-secondary">stop</button>
         </div>

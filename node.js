@@ -10,12 +10,13 @@ app.use(upload());
 app.post("/", (req, res) => {
   const file = req.files.inpFile;
   const fileName = file.name;
-  module.exports.file = fileName;
-  file.mv(`./src/uploads/${fileName}`, (err) => {
+  console.log(file);
+  file.mv(`./src/${fileName}`, (err) => {
     if (err) {
       res.status(404).send(err);
     } else {
-      res.redirect("http://127.0.0.1:3000/");
+      res.redirect(`http://127.0.0.1:3000`);
+      res.status(200);
       //send properly respons
     }
   });

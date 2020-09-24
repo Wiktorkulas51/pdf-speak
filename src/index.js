@@ -7,6 +7,16 @@ const inputeCrruentPage = document.querySelector(".current_page");
 const zoomIn = document.querySelector(".zoom_in");
 const zoomOut = document.querySelector(".zoom_out");
 const guide = document.querySelector(".guide");
+const label = document.querySelector(".inpute-label");
+
+label.onclick = () => {
+  inpFile.click();
+  if (inpFile.value != inpFile.value) {
+    return;
+  } else {
+    label.innerHTML = "File has been choose";
+  }
+};
 
 // btn.addEventListener("click", () => {
 //   const text = document.querySelector("#txt").value;
@@ -18,11 +28,22 @@ const myState = {
   currentPage: 1,
   zoom: 1.2,
   fullPages: null,
+  fileName: "./example2.pdf",
 };
 
+inpFile.onchange = (e) => {
+  let file = e.target.files;
+  if (myState.fileName === null) {
+    return;
+  } else {
+    myState.fileName = `./${file[0].name}`;
+  }
+
+  console.log("inpFile.onchange -> myState.fileName", myState.fileName);
+};
 //render pdf from inpute
 
-const pdfJsLib = pdfjsLib.getDocument("example2.pdf");
+const pdfJsLib = pdfjsLib.getDocument(myState.fileName);
 pdfJsLib.promise.then((pdf) => {
   const viewer = document.querySelector(".canvas_conteiner");
   myState.pdf = pdf;
@@ -42,12 +63,6 @@ function render(pageNumber, canvas, scale = 1.2) {
   const ctx = canvas.getContext("2d");
 
   const renderTask = null;
-
-  if (renderTask !== null) {
-    console.log("es");
-    renderTask.cancel();
-    return;
-  }
 
   myState.pdf
     .getPage(pageNumber)
@@ -78,7 +93,7 @@ btnNext.addEventListener("click", () => {
     myState.currentPage > myState.pdf._pdfInfo.numPages
   )
     return;
-  myState.currentPage = myState.currentPage + 1;
+  myState.currentPage = parseInt(inputeCrruentPage.value) + 1;
   inputeCrruentPage.value = myState.currentPage;
 
   render(myState.currentPage, canvas);
@@ -86,7 +101,7 @@ btnNext.addEventListener("click", () => {
 
 btnPrevious.addEventListener("click", () => {
   if (myState.pdf == null || myState.currentPage == 1) return;
-  myState.currentPage = myState.currentPage - 1;
+  myState.currentPage = inputeCrruentPage.value - 1;
   inputeCrruentPage.value = myState.currentPage;
 
   render(myState.currentPage, canvas);
@@ -104,26 +119,22 @@ zoomOut.addEventListener("click", () => {
   render(myState.currentPage, canvas, myState.zoom);
 });
 
-//onchange or onclick change page based of the inpute value
-// inputeCrruentPage.addEventListener("change", (e) => {
-//   myState.currentPage = inputeCrruentPage.value;
-//   console.log(myState.currentPage);
-//   render(myState.currentPage, canvas);
-// });
+// onchange or onclick change page based of the inpute value
+inputeCrruentPage.addEventListener("keypress", (e) => {
+  myState.currentPage = inputeCrruentPage.value;
+  const val = inputeCrruentPage.value;
+  e.keyCode == 13 ? render(parseInt(val), canvas) : console.log("something");
 
-// async function createParagraf() {
-//   const loadingParagraf = document.createElement("p");
-//   loadingParagraf.innerHTML = "Hello, wait a bit, the text is loading :)";
-//   loadingParagraf.classList = "loadingparagraf";
-//   const wrap = document.querySelector(".canvas_conteiner");
-//   await wrap.appendChild(loadingParagraf);
-// }
+  if (val >= myState.pdf._pdfInfo.numPages) {
+    alert(`The pdf has only ${myState.pdf._pdfInfo.numPages} pages`);
+  }
+});
 
 //implement this text to voice caller
 async function getPdfText() {
   let check = false;
   const simleArray = [];
-  let doc = await pdfjsLib.getDocument("example2.pdf").promise;
+  let doc = await pdfjsLib.getDocument(myState.fileName).promise;
   let pageTexts = Array.from({ length: doc.numPages }, async (v, i) => {
     return (await (await doc.getPage(i + 1)).getTextContent()).items.map(
       (token) => token.str
