@@ -49,6 +49,8 @@
 }
 
 .current_page {
+    -webkit-appearance: none;
+    width: 20%;
     height: 65%;
     margin-top: 6px;
 }
@@ -99,4 +101,8 @@
     display: block;
     margin-left: 100px;
     margin-right: -100px;
+}
+
+.maxPage {
+    color: white;
 }

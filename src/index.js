@@ -33,28 +33,50 @@ const myState = {
 
 inpFile.onchange = (e) => {
   let file = e.target.files;
-  if (myState.fileName === null) {
-    return;
-  } else {
-    myState.fileName = `./${file[0].name}`;
+  console.log(file);
+  const fileName = `./${file[0].name}`;
+  if (fileName) {
+    const fileDateName = (localStorage["myKey"] = fileName);
   }
-
-  console.log("inpFile.onchange -> myState.fileName", myState.fileName);
 };
 //render pdf from inpute
+const localDate = localStorage.getItem("myKey");
+console.log("localDate", localDate);
+if (!localDate) {
+  const pdfJsLib = pdfjsLib.getDocument(myState.fileName);
+  pdfJsLib.promise.then((pdf) => {
+    const viewer = document.querySelector(".canvas_conteiner");
+    myState.pdf = pdf;
+    myState.fullPages = myState.pdf.numPages;
 
-const pdfJsLib = pdfjsLib.getDocument(myState.fileName);
-pdfJsLib.promise.then((pdf) => {
-  const viewer = document.querySelector(".canvas_conteiner");
-  myState.pdf = pdf;
-  myState.fullPages = myState.pdf.numPages;
-  if (myState.fullPages >= 1) {
-    canvas = document.createElement("canvas");
-    canvas.className = "pdf_renderer";
-    viewer.appendChild(canvas);
-    render(myState.currentPage, canvas);
-  }
-});
+    const maxPage = document.querySelector(".maxPage");
+    maxPage.innerHTML = `/${myState.fullPages}`;
+
+    if (myState.fullPages >= 1) {
+      canvas = document.createElement("canvas");
+      canvas.className = "pdf_renderer";
+      viewer.appendChild(canvas);
+      render(myState.currentPage, canvas);
+    }
+  });
+} else {
+  const pdfJsLib = pdfjsLib.getDocument(localDate);
+  pdfJsLib.promise.then((pdf) => {
+    const viewer = document.querySelector(".canvas_conteiner");
+    myState.pdf = pdf;
+    myState.fullPages = myState.pdf.numPages;
+
+    const maxPage = document.querySelector(".maxPage");
+    maxPage.innerHTML = `/${myState.fullPages}`;
+
+    if (myState.fullPages >= 1) {
+      canvas = document.createElement("canvas");
+      canvas.className = "pdf_renderer";
+      viewer.appendChild(canvas);
+      render(myState.currentPage, canvas);
+    }
+  });
+}
 
 // render whole pdf on one screen
 
@@ -125,8 +147,8 @@ inputeCrruentPage.addEventListener("keypress", (e) => {
   const val = inputeCrruentPage.value;
   e.keyCode == 13 ? render(parseInt(val), canvas) : console.log("something");
 
-  if (val >= myState.pdf._pdfInfo.numPages) {
-    alert(`The pdf has only ${myState.pdf._pdfInfo.numPages} pages`);
+  if (val >= myState.fullPages) {
+    alert(`The pdf has only ${myState.fullPages} pages`);
   }
 });
 
@@ -134,15 +156,27 @@ inputeCrruentPage.addEventListener("keypress", (e) => {
 async function getPdfText() {
   let check = false;
   const simleArray = [];
-  let doc = await pdfjsLib.getDocument(myState.fileName).promise;
-  let pageTexts = Array.from({ length: doc.numPages }, async (v, i) => {
-    return (await (await doc.getPage(i + 1)).getTextContent()).items.map(
-      (token) => token.str
-    );
-  });
-  // return it as an array
-  const text = (await Promise.all(pageTexts)).join("");
-  simleArray.push(text);
+  if (!localDate) {
+    let doc = await pdfjsLib.getDocument(myState.fileName).promise;
+    let pageTexts = Array.from({ length: doc.numPages }, async (v, i) => {
+      return (await (await doc.getPage(i + 1)).getTextContent()).items.map(
+        (token) => token.str
+      );
+    });
+    // return it as an array
+    const text = (await Promise.all(pageTexts)).join("");
+    simleArray.push(text);
+  } else {
+    let doc = await pdfjsLib.getDocument(localDate).promise;
+    let pageTexts = Array.from({ length: doc.numPages }, async (v, i) => {
+      return (await (await doc.getPage(i + 1)).getTextContent()).items.map(
+        (token) => token.str
+      );
+    });
+    // return it as an array
+    const text = (await Promise.all(pageTexts)).join("");
+    simleArray.push(text);
+  }
 
   const stopButton = document.querySelector(".stop");
 
