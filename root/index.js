@@ -41,7 +41,7 @@ inpFile.onchange = (e) => {
 };
 //render pdf from inpute
 const localDate = localStorage.getItem("myKey");
-console.log("localDate", localDate);
+
 if (!localDate) {
   const pdfJsLib = pdfjsLib.getDocument(myState.fileName);
   pdfJsLib.promise.then((pdf) => {
@@ -89,16 +89,17 @@ function render(pageNumber, canvas, scale = 1.2) {
   myState.pdf
     .getPage(pageNumber)
     .then((page) => {
-      const viewport = page.getViewport({ scale: scale });
+      const cw = (canvas.width = 1019);
+      const ch = (canvas.height = 1319);
 
-      canvas.width = 1019;
-      canvas.height = 1319;
-      //after pdf pops up on the screen make everything form the top invisibility for now i suggest only when scroll up then shows input and upload button
+      const view = page.getViewport({
+        scale: localDate ? scale : scale,
+      });
 
       renderTask = page.render({
         canvasContext: ctx,
         transform: [PRINT_UNITS, 0, 0, PRINT_UNITS, 0, 0],
-        viewport: viewport,
+        viewport: view,
       }).promise;
     })
     .catch((err) => {
@@ -199,8 +200,8 @@ async function getPdfText() {
   });
 
   //search
-  console.log("responsiveVoice", responsiveVoice);
 }
+console.log("responsiveVoice", responsiveVoice);
 
 getPdfText();
 
