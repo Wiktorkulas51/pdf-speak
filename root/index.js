@@ -201,7 +201,6 @@ async function getPdfText() {
 
   //search
 }
-console.log("responsiveVoice", responsiveVoice);
 
 getPdfText();
 
