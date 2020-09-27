@@ -5,16 +5,14 @@
     "main": "index.js",
     "scripts": {
         "start": "./node_modules/.bin/netlify-lambda serve src",
-        "build": "./node_modules/.bin/netlify-lambda build src"
+        "build": "nodemon node.js"
     },
     "author": "",
     "license": "ISC",
     "dependencies": {
         "bootstrap": "^4.5.2",
-        "bundle-js": "^1.0.3",
         "express": "^4.17.1",
         "express-fileupload": "^1.2.0",
-        "netlify-lambda": "^2.0.1",
         "nodemon": "^2.0.4",
         "serverless-http": "^2.6.0"
     }
