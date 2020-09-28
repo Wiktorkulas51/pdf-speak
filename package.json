@@ -4,10 +4,10 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "start": "./node_modules/.bin/netlify-lambda serve src",
+        "start": "nodemon node.js",
         "build": "nodemon node.js"
     },
-    "author": "",
+    "author": "Wiktor Kulas",
     "license": "ISC",
     "dependencies": {
         "bootstrap": "^4.5.2",

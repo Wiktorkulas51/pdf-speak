@@ -14,7 +14,7 @@ app.post("/", (req, res) => {
   const file = req.files.inpFile;
   const fileName = file.name;
   console.log(file);
-  file.mv(`./${fileName}`, (err) => {
+  file.mv(`./root/${fileName}`, (err) => {
     if (err) {
       res.status(404).send(err);
     } else {
