@@ -2,7 +2,6 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const upload = require("express-fileupload");
-const serverless = require("serverless-http");
 
 const port = 3000;
 

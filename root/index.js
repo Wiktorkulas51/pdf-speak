@@ -18,11 +18,6 @@ label.onclick = () => {
   }
 };
 
-// btn.addEventListener("click", () => {
-//   const text = document.querySelector("#txt").value;
-//   responsiveVoice.speak(text);
-// });
-
 const myState = {
   pdf: null,
   currentPage: 1,
@@ -39,7 +34,7 @@ inpFile.onchange = (e) => {
     const fileDateName = (localStorage["myKey"] = fileName);
   }
 };
-//render pdf from inpute
+
 const localDate = localStorage.getItem("myKey");
 
 if (!localDate) {
@@ -78,13 +73,9 @@ if (!localDate) {
   });
 }
 
-// render whole pdf on one screen
-
-function render(pageNumber, canvas, scale = 1.2) {
+async function render(pageNumber, canvas, scale = 1.2) {
   const PRINT_UNITS = 100 / 72;
   const ctx = canvas.getContext("2d");
-
-  const renderTask = null;
 
   myState.pdf
     .getPage(pageNumber)
@@ -92,14 +83,26 @@ function render(pageNumber, canvas, scale = 1.2) {
       const cw = (canvas.width = 1019);
       const ch = (canvas.height = 1319);
 
+      const scalee = () => {
+        const unscaledViewport = page.getViewport({ scale: scale });
+        scale = Math.min(
+          ch / unscaledViewport.height,
+          cw / unscaledViewport.width
+        );
+
+        return scale;
+      };
       const view = page.getViewport({
-        scale: localDate ? scale : scale,
+        scale: localDate ? scalee() : scale,
       });
 
-      renderTask = page.render({
+      // const scaleea = cw / (view.width * PRINT_UNITS);
+
+      page.render({
         canvasContext: ctx,
         transform: [PRINT_UNITS, 0, 0, PRINT_UNITS, 0, 0],
         viewport: view,
+        renderInteractiveForms: true,
       }).promise;
     })
     .catch((err) => {
@@ -107,7 +110,6 @@ function render(pageNumber, canvas, scale = 1.2) {
         render(myState.currentPage, canvas);
       }
     });
-  //only for now
 }
 
 btnNext.addEventListener("click", () => {
@@ -142,7 +144,6 @@ zoomOut.addEventListener("click", () => {
   render(myState.currentPage, canvas, myState.zoom);
 });
 
-// onchange or onclick change page based of the inpute value
 inputeCrruentPage.addEventListener("keypress", (e) => {
   myState.currentPage = inputeCrruentPage.value;
   const val = inputeCrruentPage.value;
@@ -153,7 +154,6 @@ inputeCrruentPage.addEventListener("keypress", (e) => {
   }
 });
 
-//implement this text to voice caller
 async function getPdfText() {
   let check = false;
   const simleArray = [];
@@ -164,7 +164,7 @@ async function getPdfText() {
         (token) => token.str
       );
     });
-    // return it as an array
+
     const text = (await Promise.all(pageTexts)).join("");
     simleArray.push(text);
   } else {
@@ -174,7 +174,7 @@ async function getPdfText() {
         (token) => token.str
       );
     });
-    // return it as an array
+
     const text = (await Promise.all(pageTexts)).join("");
     simleArray.push(text);
   }
@@ -194,17 +194,11 @@ async function getPdfText() {
       } else {
         responsiveVoice.speak(element);
       }
-
-      // console.log("responsiveVoice", responsiveVoice.getWords());
     });
   });
-
-  //search
 }
 
 getPdfText();
-
-// quick guide
 
 guide.addEventListener("click", () => {
   guide.classList = "guide smoothe";

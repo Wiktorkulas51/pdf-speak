@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "start": "node node.js",
+        "start": "nodemon node.js",
         "build": "nodemon node.js"
     },
     "author": "Wiktor Kulas",
