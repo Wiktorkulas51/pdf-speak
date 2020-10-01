@@ -85,15 +85,19 @@ async function render(pageNumber, canvas, scale = 1.2) {
 
       const scalee = () => {
         const unscaledViewport = page.getViewport({ scale: scale });
-        scale = Math.min(
+
+        scalea = Math.min(
           ch / unscaledViewport.height,
           cw / unscaledViewport.width
         );
 
-        return scale;
+        if (unscaledViewport.height != "950.4") {
+          return scalea;
+        }
       };
+
       const view = page.getViewport({
-        scale: localDate ? scalee() : scale,
+        scale: scalee() ? scalee() : scale,
       });
 
       // const scaleea = cw / (view.width * PRINT_UNITS);
@@ -147,7 +151,7 @@ zoomOut.addEventListener("click", () => {
 inputeCrruentPage.addEventListener("keypress", (e) => {
   myState.currentPage = inputeCrruentPage.value;
   const val = inputeCrruentPage.value;
-  e.keyCode == 13 ? render(parseInt(val), canvas) : console.log("something");
+  e.keyCode == 13 ? render(parseInt(val), canvas) : console.log("");
 
   if (val >= myState.fullPages) {
     alert(`The pdf has only ${myState.fullPages} pages`);
@@ -193,6 +197,8 @@ async function getPdfText() {
         responsiveVoice.resume();
       } else {
         responsiveVoice.speak(element);
+        console.log(new SpeechSynthesisUtterance());
+        console.log(navigator);
       }
     });
   });
