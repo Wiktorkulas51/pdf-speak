@@ -7,14 +7,14 @@ const inputeCrruentPage = document.querySelector(".current_page");
 const zoomIn = document.querySelector(".zoom_in");
 const zoomOut = document.querySelector(".zoom_out");
 const guide = document.querySelector(".guide");
-const label = document.querySelector(".inpute-label");
+const labelForFiles = document.querySelector(".inpute-label");
 
-label.onclick = () => {
+labelForFiles.onclick = () => {
   inpFile.click();
   if (inpFile.value != inpFile.value) {
     return;
   } else {
-    label.innerHTML = "File has been choose";
+    labelForFiles.innerHTML = "File has been choose";
   }
 };
 
@@ -35,9 +35,9 @@ inpFile.onchange = (e) => {
   }
 };
 
-const localDate = localStorage.getItem("myKey");
+const localFileNameDate = localStorage.getItem("myKey");
 
-if (!localDate) {
+if (!localFileNameDate) {
   const pdfJsLib = pdfjsLib.getDocument(myState.fileName);
   pdfJsLib.promise.then((pdf) => {
     const viewer = document.querySelector(".canvas_conteiner");
@@ -55,7 +55,7 @@ if (!localDate) {
     }
   });
 } else {
-  const pdfJsLib = pdfjsLib.getDocument(localDate);
+  const pdfJsLib = pdfjsLib.getDocument(localFileNameDate);
   pdfJsLib.promise.then((pdf) => {
     const viewer = document.querySelector(".canvas_conteiner");
     myState.pdf = pdf;
@@ -160,8 +160,8 @@ inputeCrruentPage.addEventListener("keypress", (e) => {
 
 async function getPdfText() {
   let check = false;
-  const simleArray = [];
-  if (!localDate) {
+  const arrayOfTheText = [];
+  if (!localFileNameDate) {
     let doc = await pdfjsLib.getDocument(myState.fileName).promise;
     let pageTexts = Array.from({ length: doc.numPages }, async (v, i) => {
       return (await (await doc.getPage(i + 1)).getTextContent()).items.map(
@@ -170,9 +170,9 @@ async function getPdfText() {
     });
 
     const text = (await Promise.all(pageTexts)).join("");
-    simleArray.push(text);
+    arrayOfTheText.push(text);
   } else {
-    let doc = await pdfjsLib.getDocument(localDate).promise;
+    let doc = await pdfjsLib.getDocument(localFileNameDate).promise;
     let pageTexts = Array.from({ length: doc.numPages }, async (v, i) => {
       return (await (await doc.getPage(i + 1)).getTextContent()).items.map(
         (token) => token.str
@@ -180,7 +180,7 @@ async function getPdfText() {
     });
 
     const text = (await Promise.all(pageTexts)).join("");
-    simleArray.push(text);
+    arrayOfTheText.push(text);
   }
 
   const stopButton = document.querySelector(".stop");
@@ -191,14 +191,13 @@ async function getPdfText() {
   });
 
   const speakButton = document.querySelector(".speak");
+
   speakButton.addEventListener("click", () => {
-    simleArray.forEach(async (element) => {
+    arrayOfTheText.forEach(async (element) => {
       if (check) {
         responsiveVoice.resume();
       } else {
         responsiveVoice.speak(element);
-        console.log(new SpeechSynthesisUtterance());
-        console.log(navigator);
       }
     });
   });
@@ -209,7 +208,7 @@ getPdfText();
 guide.addEventListener("click", () => {
   guide.classList = "guide smoothe";
   guide.innerHTML =
-    "Hello thats quick guid, first choose File(only pdf) or use defult one, speak - use text speaker, stop - stop text speaker, next - next page, previous - previous page, + - zoom in, - - zoom out ";
+    "Hello thats quick guid, first choose File(only pdf) or use defult one, speak - use text speaker, stop - stop text speaker, next - next page, previous - previous page, + - zoom in, - - zoom out";
   setTimeout(() => {
     guide.classList = "guide btn btn-secondary";
     guide.innerHTML = "Guide";
