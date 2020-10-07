@@ -2,18 +2,21 @@
     "name": "stsjs",
     "version": "1.0.0",
     "description": "",
-    "main": "index.js",
+    "main": "node.js",
     "scripts": {
-        "start": "nodemon node.js",
+        "start": "node node.js",
         "build": "nodemon node.js"
     },
     "author": "Wiktor Kulas",
     "license": "ISC",
-    "dependencies": {
+    "devDependencies": {
+        "nodemon": "2.0.4",
         "bootstrap": "^4.5.2",
         "express": "^4.17.1",
         "express-fileupload": "^1.2.0",
-        "nodemon": "^2.0.4",
         "serverless-http": "^2.6.0"
+    },
+    "engines": {
+        "node": "12.14.0"
     }
 }
